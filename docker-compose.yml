@@ -1,0 +1,38 @@
+application:
+  image: debian:jessie
+  volumes:
+    - ./app1:/usr/share/app1
+    - ./app2:/usr/share/app2
+  tty: true
+
+php:
+  build: ./php
+  ports:
+    - 9000:9000
+  volumes_from:
+    - application
+  links:
+    - mysql
+
+nginx:
+  image: nginx
+  ports:
+      - 8083:80
+      - 443
+  links:
+      - php
+  volumes_from:
+      - application
+  volumes:
+      - ./log/nginx:/var/log/nginx
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+
+mysql:
+    build: ./mysql
+    ports:
+        - 3307:3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: test
+        MYSQL_PASSWORD: qwerty
+        MYSQL_DATABASE: app1;app2
