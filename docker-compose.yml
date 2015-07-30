@@ -14,6 +14,7 @@ php:
   links:
     - mysql
     - redis
+    - gearman
 
 nginx:
   image: nginx
@@ -29,16 +30,22 @@ nginx:
       - ./nginx/conf.d:/etc/nginx/conf.d/
 
 mysql:
-    build: ./mysql
-    ports:
-        - 3307:3306
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_USER: test
-        MYSQL_PASSWORD: qwerty
-        MYSQL_DATABASE: app1;app2
+  build: ./mysql
+  ports:
+      - 3307:3306
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_USER: test
+    MYSQL_PASSWORD: qwerty
+    MYSQL_DATABASE: app1;app2
 
 redis:
   image: redis
   ports:
     - 6379
+
+gearman:
+  image: mustardgrain/gearman-server
+  ports:
+    - 4730
+

@@ -14,4 +14,10 @@ RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 
+RUN apt-get update && apt-get install -y libgearman-dev
+
+RUN pecl install gearman
+
+RUN echo "extension=gearman.so" > /usr/local/etc/php/conf.d/gearman.ini
+
 CMD ["php-fpm"]
